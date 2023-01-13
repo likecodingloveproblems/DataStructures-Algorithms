@@ -82,6 +82,8 @@ func (l *List[T]) PopFirst() (*Node[T], error) {
 	}()
 	node := l.Head
 	l.Head = l.Head.Next
+	l.Head.Previous = l.Tail
+	l.Tail.Next = l.Head
 	return node, nil
 }
 
@@ -95,6 +97,8 @@ func (l *List[T]) PopLast() (*Node[T], error) {
 	}()
 	node := l.Tail
 	l.Tail = node.Previous
+	l.Tail.Next = l.Head
+	l.Head.Previous = l.Tail
 	return node, nil
 }
 
@@ -172,5 +176,14 @@ func (l *List[T]) RemoveFirst() error {
 		return ListIsEmpty
 	}
 	l.PopFirst()
+	return nil
+}
+
+// Remove the tail node of the list
+func (l *List[T]) RemoveLast() error {
+	if l.IsEmpty() {
+		return ListIsEmpty
+	}
+	l.PopLast()
 	return nil
 }

@@ -82,6 +82,19 @@ func TestPopFirst(t *testing.T) {
 		assert.Equal(t, &node, v)
 		assert.Equal(t, uint(0), l.GetCount())
 	})
+
+	t.Run("pop first node of a multiple node list", func(t *testing.T) {
+		nodes := make([]linkedlist.Node[int], 5)
+		l := linkedlist.List[int]{}
+		for i := 0; i < 5; i++ {
+			nodes[i] = linkedlist.Node[int]{Value: i}
+			l.AddLast(&nodes[i])
+		}
+		node, err := l.PopFirst()
+		assert.Equal(t, &nodes[0], node)
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{1, 2, 3, 4}, l)
+	})
 }
 
 func TestPopLast(t *testing.T) {
@@ -111,6 +124,7 @@ func TestPopLast(t *testing.T) {
 		assert.Equal(t, nil, err)
 		assert.Equal(t, 3, n.Value)
 		assert.Equal(t, uint(2), l.GetCount())
+		assertCircularDoublyLinkedList(t, []int{1, 2}, l)
 	})
 }
 
@@ -210,12 +224,48 @@ func TestRemoveFirst(t *testing.T) {
 		assert.Equal(t, want, got)
 	})
 
-	t.Run("remove the last the first node of a list", func(t *testing.T) {
+	t.Run("remove the first node of a one node list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		l.AddFirst(&linkedlist.Node[int]{Value: 1})
 		err := l.RemoveFirst()
 		assert.Equal(t, nil, err)
 		assert.Equal(t, true, l.IsEmpty())
+	})
+
+	t.Run("remove the first node of multiple node list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		l.AddLast(&linkedlist.Node[int]{Value: 1})
+		l.AddLast(&linkedlist.Node[int]{Value: 2})
+		l.AddLast(&linkedlist.Node[int]{Value: 3})
+		l.AddLast(&linkedlist.Node[int]{Value: 4})
+		l.RemoveFirst()
+		assertCircularDoublyLinkedList(t, []int{2, 3, 4}, l)
+	})
+}
+
+func TestRemoveLast(t *testing.T) {
+	t.Run("empty list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		err := l.RemoveLast()
+		assert.Equal(t, linkedlist.ListIsEmpty, err)
+	})
+
+	t.Run("remove last of a one node list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		l.AddFirst(&linkedlist.Node[int]{Value: 1})
+		err := l.RemoveLast()
+		assert.Equal(t, nil, err)
+		assert.Equal(t, uint(0), l.GetCount())
+	})
+
+	t.Run("remvoe the last node of a multiple node list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		for i := 0; i < 5; i++ {
+			l.AddLast(&linkedlist.Node[int]{Value: i})
+		}
+		err := l.RemoveLast()
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{0, 1, 2, 3}, l)
 	})
 }
 
@@ -226,7 +276,7 @@ func assertCircularDoublyLinkedList[T comparable](t testing.TB, values []T, list
 	assert.Equal(t, values[len(values)-1], list.Tail.Value)
 	head := list.Head
 	node := head
-	for index, _ := range values {
+	for index := range values {
 		// Check previous node
 		if index == 0 {
 			assert.Equal(t, values[len(values)-1], node.Previous.Value)
