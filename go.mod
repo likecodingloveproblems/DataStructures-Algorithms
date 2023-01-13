@@ -1,4 +1,4 @@
-module dsa
+module github.com/likecodingloveproblems/DataStructures-Algorithms
 
 go 1.19
 
