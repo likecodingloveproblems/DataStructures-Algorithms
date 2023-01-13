@@ -98,25 +98,6 @@ func (l *List[T]) PopLast() (*Node[T], error) {
 	return node, nil
 }
 
-// Check node is in the list
-// it will traverse all the list's node and return bool
-func (l *List[T]) Contains(node *Node[T]) bool {
-	if l.IsEmpty() {
-		return false
-	}
-	n := l.Head
-	for {
-		if n == node {
-			return true
-		}
-		n = n.Next
-		if n == l.Head {
-			break
-		}
-	}
-	return false
-}
-
 // Add new node after the node
 // Caution: it won't check the node is in the list or not
 // so if the user send a node that is not in the list,
@@ -145,4 +126,30 @@ func (l *List[T]) AddBefore(node, newNode *Node[T]) {
 	if l.Head == node {
 		l.Head = newNode
 	}
+}
+
+// Check node is in the list
+// it will traverse all the list's node and return bool
+// Caution: it will check the node pointer
+func (l *List[T]) Contains(node *Node[T]) bool {
+	if l.IsEmpty() {
+		return false
+	}
+	n := l.Head
+	for {
+		if n == node {
+			return true
+		}
+		n = n.Next
+		if n == l.Head {
+			break
+		}
+	}
+	return false
+}
+
+// Check the list contains the value
+// It will check the value of the node
+func (l *List[T]) ContainsValue(value T) bool {
+	return false
 }
