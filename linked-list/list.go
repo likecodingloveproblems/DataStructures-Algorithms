@@ -181,3 +181,46 @@ func (l *List[T]) RemoveLast() error {
 	_, err := l.PopLast()
 	return err
 }
+
+func (l *List[T]) RemoveValue(value T) error {
+	if l.IsEmpty() {
+		return ListIsEmpty
+	}
+	node := l.Head
+	for {
+		if node.Value == value {
+			return l.Remove(node)
+		}
+		node = node.Next
+		if node == l.Head {
+			break
+		}
+	}
+	return ValueDoesNotExists
+}
+
+func (l *List[T]) Remove(node *Node[T]) error {
+	if l.IsEmpty() {
+		return ListIsEmpty
+	}
+	if node == l.Head {
+		return l.RemoveFirst()
+	} else if node == l.Tail {
+		return l.RemoveLast()
+	} else {
+		currentNode := l.Head.Next
+		for {
+			if currentNode == node {
+				currentNode.Previous.Next = currentNode.Next
+				currentNode.Next.Previous = currentNode.Previous
+				l.count--
+				// TODO deconstruct currentNode
+				return nil
+			}
+			currentNode = currentNode.Next
+			if currentNode == l.Tail {
+				return NodeDoesNotExists
+			}
+		}
+	}
+}

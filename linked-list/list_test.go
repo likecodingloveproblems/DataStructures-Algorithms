@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIsEmpty(t *testing.T) {
+func TestList_IsEmpty(t *testing.T) {
 	t.Run("list is empty initially", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		got := l.IsEmpty()
@@ -34,7 +34,7 @@ func TestIsEmpty(t *testing.T) {
 	})
 }
 
-func TestAddFirst(t *testing.T) {
+func TestList_AddFirst(t *testing.T) {
 	t.Run("add one item to the first of list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node1 := linkedlist.Node[int]{Value: 1}
@@ -47,7 +47,7 @@ func TestAddFirst(t *testing.T) {
 	})
 }
 
-func TestAddLast(t *testing.T) {
+func TestList_AddLast(t *testing.T) {
 	t.Run("AddLast to an empty list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node1 := linkedlist.Node[int]{Value: 1}
@@ -66,7 +66,7 @@ func TestAddLast(t *testing.T) {
 	})
 }
 
-func TestPopFirst(t *testing.T) {
+func TestList_PopFirst(t *testing.T) {
 	t.Run("empty list will return error", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		_, err := l.PopFirst()
@@ -97,7 +97,7 @@ func TestPopFirst(t *testing.T) {
 	})
 }
 
-func TestPopLast(t *testing.T) {
+func TestList_PopLast(t *testing.T) {
 	t.Run("PopLast from empty list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		_, err := l.PopLast()
@@ -128,7 +128,7 @@ func TestPopLast(t *testing.T) {
 	})
 }
 
-func TestContains(t *testing.T) {
+func TestList_Contains(t *testing.T) {
 	t.Run("node is not in list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node := &linkedlist.Node[int]{Value: 1}
@@ -159,7 +159,7 @@ func TestContains(t *testing.T) {
 	})
 }
 
-func TestAddAfter(t *testing.T) {
+func TestList_AddAfter(t *testing.T) {
 	t.Run("add after a node in normal situation", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node2 := &linkedlist.Node[int]{Value: 2}
@@ -179,7 +179,7 @@ func TestAddAfter(t *testing.T) {
 	})
 }
 
-func TestAddBefore(t *testing.T) {
+func TestList_AddBefore(t *testing.T) {
 	t.Run("add before a node", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node2 := &linkedlist.Node[int]{Value: 2}
@@ -199,7 +199,7 @@ func TestAddBefore(t *testing.T) {
 	})
 }
 
-func TestContainsValue(t *testing.T) {
+func TestList_ContainsValue(t *testing.T) {
 	t.Run("list is empty", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		want := false
@@ -216,7 +216,7 @@ func TestContainsValue(t *testing.T) {
 	})
 }
 
-func TestRemoveFirst(t *testing.T) {
+func TestList_RemoveFirst(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		got := l.RemoveFirst()
@@ -243,7 +243,7 @@ func TestRemoveFirst(t *testing.T) {
 	})
 }
 
-func TestRemoveLast(t *testing.T) {
+func TestList_RemoveLast(t *testing.T) {
 	t.Run("empty list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		err := l.RemoveLast()
@@ -266,6 +266,82 @@ func TestRemoveLast(t *testing.T) {
 		err := l.RemoveLast()
 		assert.Equal(t, nil, err)
 		assertCircularDoublyLinkedList(t, []int{0, 1, 2, 3}, l)
+	})
+}
+
+func TestList_RemoveValue(t *testing.T) {
+	t.Run("empty list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		err := l.RemoveValue(1)
+		assert.Equal(t, linkedlist.ListIsEmpty, err)
+	})
+	t.Run("remove from one item list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		l.AddFirst(&linkedlist.Node[int]{Value: 1})
+		err := l.RemoveValue(1)
+		assert.Equal(t, nil, err)
+		assert.Equal(t, true, l.IsEmpty())
+	})
+	t.Run("remove the head node value", func(t *testing.T) {
+		l, nodes := generateList(3)
+		err := l.RemoveValue(nodes[0].Value)
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{1, 2}, l)
+	})
+	t.Run("remove the tail node value", func(t *testing.T) {
+		l, nodes := generateList(3)
+		err := l.RemoveValue(nodes[2].Value)
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{0, 1}, l)
+	})
+	t.Run("remove the value in the middle", func(t *testing.T) {
+		l, nodes := generateList(3)
+		err := l.RemoveValue(nodes[1].Value)
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{0, 2}, l)
+	})
+	t.Run("duplicate values", func(t *testing.T) {
+		l, _ := generateList(3)
+		l.AddLast(&linkedlist.Node[int]{Value: 1})
+		err := l.RemoveValue(1)
+		assert.Equal(t, nil, err)
+		assertCircularDoublyLinkedList(t, []int{0, 2, 1}, l)
+	})
+	t.Run("value does not exists", func(t *testing.T) {
+		l, _ := generateList(3)
+		err := l.RemoveValue(3)
+		assert.Equal(t, linkedlist.ValueDoesNotExists, err)
+		assertCircularDoublyLinkedList(t, []int{0, 1, 2}, l)
+	})
+}
+
+func TestList_Remove(t *testing.T) {
+	t.Run("empty list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		node := &linkedlist.Node[int]{Value: 1}
+		err := l.Remove(node)
+		assert.Equal(t, linkedlist.ListIsEmpty, err)
+	})
+	t.Run("remove the head node", func(t *testing.T) {
+		l, nodes := generateList(5)
+		l.Remove(nodes[0])
+		assertCircularDoublyLinkedList(t, []int{1, 2, 3, 4}, l)
+	})
+	t.Run("remove the tail node", func(t *testing.T) {
+		l, nodes := generateList(5)
+		l.Remove(nodes[4])
+		assertCircularDoublyLinkedList(t, []int{0, 1, 2, 3}, l)
+	})
+	t.Run("remove the node in the middle", func(t *testing.T) {
+		l, nodes := generateList(5)
+		l.Remove(nodes[2])
+		assertCircularDoublyLinkedList(t, []int{0, 1, 3, 4}, l)
+	})
+	t.Run("node is node in the list", func(t *testing.T) {
+		l, _ := generateList(3)
+		err := l.Remove(&linkedlist.Node[int]{Value: 0})
+		assertCircularDoublyLinkedList(t, []int{0, 1, 2}, l)
+		assert.Equal(t, linkedlist.NodeDoesNotExists, err)
 	})
 }
 
@@ -293,4 +369,14 @@ func assertCircularDoublyLinkedList[T comparable](t testing.TB, values []T, list
 		}
 		node = node.Next
 	}
+}
+
+func generateList(numberOfNodes int) (linkedlist.List[int], []*linkedlist.Node[int]) {
+	nodes := make([]*linkedlist.Node[int], numberOfNodes)
+	l := linkedlist.List[int]{}
+	for i := 0; i < numberOfNodes; i++ {
+		nodes[i] = &linkedlist.Node[int]{Value: i}
+		l.AddLast(nodes[i])
+	}
+	return l, nodes
 }
