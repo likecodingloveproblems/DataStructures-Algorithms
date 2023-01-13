@@ -165,3 +165,11 @@ func (l *List[T]) ContainsValue(value T) bool {
 	}
 	return false
 }
+
+// Remove the head of the list
+func (l *List[T]) RemoveFirst() error {
+	if l.IsEmpty() {
+		return ListIsEmpty
+	}
+	return nil
+}
