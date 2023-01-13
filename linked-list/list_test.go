@@ -123,13 +123,25 @@ func TestContains(t *testing.T) {
 		assert.Equal(t, want, got)
 	})
 
-	t.Run("node is in list", func(t *testing.T) {
+	t.Run("node is the head of list", func(t *testing.T) {
 		l := linkedlist.List[int]{}
 		node := &linkedlist.Node[int]{Value: 1}
 		l.AddFirst(node)
 		got := l.Contains(node)
 		want := true
 		assert.Equal(t, want, got)
+	})
+
+	t.Run("node is in the middle of list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		nodes := make([]linkedlist.Node[int], 10)
+		for i := 0; i < 10; i++ {
+			nodes[i] = linkedlist.Node[int]{Value: i}
+			l.AddLast(&nodes[i])
+		}
+		assert.Equal(t, true, l.Contains(&nodes[5]))
+		node := &linkedlist.Node[int]{Value: 5} // the list contains the value but the node pointer isn't equal
+		assert.Equal(t, false, l.Contains(node))
 	})
 }
 

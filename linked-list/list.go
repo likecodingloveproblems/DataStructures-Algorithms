@@ -24,9 +24,7 @@ func (l *List[T]) GetCount() uint {
 // AddFirst will add the node to the head of the list
 // so the node will become the `Head` of the list
 func (l *List[T]) AddFirst(node *Node[T]) {
-	defer func() {
-		l.count++
-	}()
+	defer func() { l.count++ }()
 	if l.IsEmpty() {
 		l.Head = node
 		l.Tail = node
@@ -51,9 +49,7 @@ func (l *List[T]) AddFirst(node *Node[T]) {
 // AddLast will add the node to the tail of the list
 // so the node will become the `Tail` of the list
 func (l *List[T]) AddLast(node *Node[T]) {
-	defer func() {
-		l.count++
-	}()
+	defer func() { l.count++ }()
 	if l.IsEmpty() {
 		l.Head = node
 		l.Tail = node
@@ -105,8 +101,18 @@ func (l *List[T]) PopLast() (*Node[T], error) {
 // Check node is in the list
 // it will traverse all the list's node and return bool
 func (l *List[T]) Contains(node *Node[T]) bool {
-	if l.Head == node {
-		return true
+	if l.IsEmpty() {
+		return false
+	}
+	n := l.Head
+	for {
+		if n == node {
+			return true
+		}
+		n = n.Next
+		if n == l.Head {
+			break
+		}
 	}
 	return false
 }
