@@ -171,5 +171,6 @@ func (l *List[T]) RemoveFirst() error {
 	if l.IsEmpty() {
 		return ListIsEmpty
 	}
+	l.PopFirst()
 	return nil
 }

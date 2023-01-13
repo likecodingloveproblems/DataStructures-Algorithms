@@ -209,6 +209,14 @@ func TestRemoveFirst(t *testing.T) {
 		want := linkedlist.ListIsEmpty
 		assert.Equal(t, want, got)
 	})
+
+	t.Run("remove the last the first node of a list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		l.AddFirst(&linkedlist.Node[int]{Value: 1})
+		err := l.RemoveFirst()
+		assert.Equal(t, nil, err)
+		assert.Equal(t, true, l.IsEmpty())
+	})
 }
 
 func assertCircularDoublyLinkedList[T comparable](t testing.TB, values []T, list linkedlist.List[T]) {
