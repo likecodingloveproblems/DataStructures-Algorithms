@@ -21,8 +21,8 @@ func (l *List[T]) GetCount() uint {
 	return l.count
 }
 
-// AddFirst will add a node to the first of the list
-// the node will become the `Head` of the list
+// AddFirst will add the node to the head of the list
+// so the node will become the `Head` of the list
 func (l *List[T]) AddFirst(node *Node[T]) {
 	defer func() {
 		l.count++
@@ -48,6 +48,8 @@ func (l *List[T]) AddFirst(node *Node[T]) {
 	}
 }
 
+// AddLast will add the node to the tail of the list
+// so the node will become the `Tail` of the list
 func (l *List[T]) AddLast(node *Node[T]) {
 	defer func() {
 		l.count++
@@ -74,6 +76,7 @@ func (l *List[T]) AddLast(node *Node[T]) {
 	}
 }
 
+// Pop the first node of the list that is `Head`
 func (l *List[T]) PopFirst() (*Node[T], error) {
 	if l.IsEmpty() {
 		return nil, ListIsEmpty
@@ -86,6 +89,7 @@ func (l *List[T]) PopFirst() (*Node[T], error) {
 	return node, nil
 }
 
+// Pop the last node of the list that is the `Tail`
 func (l *List[T]) PopLast() (*Node[T], error) {
 	if l.IsEmpty() {
 		return nil, ListIsEmpty
@@ -98,6 +102,8 @@ func (l *List[T]) PopLast() (*Node[T], error) {
 	return node, nil
 }
 
+// Check node is in the list
+// it will traverse all the list's node and return bool
 func (l *List[T]) Contains(node *Node[T]) bool {
 	if l.Head == node {
 		return true
@@ -105,6 +111,10 @@ func (l *List[T]) Contains(node *Node[T]) bool {
 	return false
 }
 
+// Add new node after the node
+// Caution: it won't check the node is in the list or not
+// so if the user send a node that is not in the list,
+// the list count will become wrong
 func (l *List[T]) AddAfter(node, newNode *Node[T]) {
 	defer func() { l.count++ }()
 	newNode.Next = node.Next
@@ -116,6 +126,10 @@ func (l *List[T]) AddAfter(node, newNode *Node[T]) {
 	}
 }
 
+// Add new node before the node
+// Caution: it won't check the node is in the list or not
+// so if the user send a node that is not in the list,
+// the list count will become wrong
 func (l *List[T]) AddBefore(node, newNode *Node[T]) {
 	defer func() { l.count++ }()
 	newNode.Next = node
