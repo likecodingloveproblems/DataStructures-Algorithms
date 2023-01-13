@@ -172,18 +172,12 @@ func (l *List[T]) ContainsValue(value T) bool {
 
 // Remove the head of the list
 func (l *List[T]) RemoveFirst() error {
-	if l.IsEmpty() {
-		return ListIsEmpty
-	}
-	l.PopFirst()
-	return nil
+	_, err := l.PopFirst()
+	return err
 }
 
 // Remove the tail node of the list
 func (l *List[T]) RemoveLast() error {
-	if l.IsEmpty() {
-		return ListIsEmpty
-	}
-	l.PopLast()
-	return nil
+	_, err := l.PopLast()
+	return err
 }
