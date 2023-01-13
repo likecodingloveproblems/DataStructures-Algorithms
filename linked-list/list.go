@@ -2,7 +2,7 @@ package linkedlist
 
 // Doubly circular linked list
 // it accept Node struct and is type generic
-type List[T any] struct {
+type List[T comparable] struct {
 	Head  *Node[T]
 	Tail  *Node[T]
 	count uint
@@ -149,7 +149,19 @@ func (l *List[T]) Contains(node *Node[T]) bool {
 }
 
 // Check the list contains the value
-// It will check the value of the node
+// It will traverse list nodes and check nodes value with the given value
 func (l *List[T]) ContainsValue(value T) bool {
+	if l.IsEmpty() {
+		return false
+	}
+	for node := l.Head; ; {
+		if node.Value == value {
+			return true
+		}
+		node = node.Next
+		if node == l.Head {
+			break
+		}
+	}
 	return false
 }

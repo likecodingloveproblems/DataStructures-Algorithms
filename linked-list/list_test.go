@@ -192,6 +192,14 @@ func TestContainsValue(t *testing.T) {
 		got := l.ContainsValue(1)
 		assert.Equal(t, want, got)
 	})
+
+	t.Run("list contain value", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		l.AddLast(&linkedlist.Node[int]{Value: 1})
+		got := l.ContainsValue(1)
+		want := true
+		assert.Equal(t, want, got)
+	})
 }
 
 func assertCircularDoublyLinkedList[T comparable](t testing.TB, values []T, list linkedlist.List[T]) {
