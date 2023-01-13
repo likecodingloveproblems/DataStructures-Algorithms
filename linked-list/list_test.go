@@ -202,6 +202,15 @@ func TestContainsValue(t *testing.T) {
 	})
 }
 
+func TestRemoveFirst(t *testing.T) {
+	t.Run("empty list", func(t *testing.T) {
+		l := linkedlist.List[int]{}
+		got := l.RemoveFirst()
+		want := linkedlist.ListIsEmpty
+		assert.Equal(t, want, got)
+	})
+}
+
 func assertCircularDoublyLinkedList[T comparable](t testing.TB, values []T, list linkedlist.List[T]) {
 	t.Helper()
 	assert.Equal(t, uint(len(values)), list.GetCount())
