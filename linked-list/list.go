@@ -66,10 +66,10 @@ func (l *List[T]) AddLast(node *Node[T]) {
 		l.Head.Previous = l.Tail
 	} else {
 		node.Previous = l.Tail
+		node.Next = l.Head
 		l.Tail.Next = node
+		l.Head.Previous = node
 		l.Tail = node
-		l.Tail.Next = l.Head
-		l.Head.Previous = l.Tail
 	}
 }
 
