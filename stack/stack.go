@@ -10,6 +10,9 @@ func (s *Stack[T]) GetCount() uint {
 }
 
 func (s *Stack[T]) ToArray() []T {
+	if s.IsEmpty() {
+		return []T{}
+	}
 	return s.items[:s.count]
 }
 
