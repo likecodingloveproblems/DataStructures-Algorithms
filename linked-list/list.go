@@ -39,10 +39,11 @@ func (l *List[T]) AddFirst(node *Node[T]) {
 		l.Tail.Previous = l.Head
 		l.Tail.Next = l.Head
 	} else {
+		node.Next = l.Head
+		node.Previous = l.Tail
 		l.Head.Previous = node
+		l.Tail.Next = node
 		l.Head = node
-		l.Head.Previous = l.Tail
-		l.Tail.Next = l.Head
 	}
 }
 
