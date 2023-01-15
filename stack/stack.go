@@ -14,7 +14,11 @@ func (s *Stack[T]) ToArray() []T {
 }
 
 func (s *Stack[T]) Push(item T) {
-	s.items = append(s.items, item)
+	if s.count < uint(len(s.items)) {
+		s.items[s.count] = item
+	} else {
+		s.items = append(s.items, item)
+	}
 	s.count++
 }
 

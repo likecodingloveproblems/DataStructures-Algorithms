@@ -31,6 +31,52 @@ func TestStack(t *testing.T) {
 	})
 }
 
+func TestStack_Pop(t *testing.T) {
+	t.Run("empty stack", func(t *testing.T) {
+		s := stack.Stack[int]{}
+		_, err := s.Pop()
+		assert.Equal(t, stack.StackIsEmpty, err)
+	})
+	t.Run("only one item stack", func(t *testing.T) {
+		s := stack.Stack[int]{}
+		s.Push(1)
+		v, err := s.Pop()
+		assert.Equal(t, 1, v)
+		assert.Equal(t, nil, err)
+	})
+	t.Run("pop from stack with multiple items", func(t *testing.T) {
+		s := stack.Stack[int]{}
+		s.Push(1)
+		s.Push(2)
+		s.Push(3)
+		v, err := s.Pop()
+		assert.Equal(t, 3, v)
+		assert.Equal(t, nil, err)
+	})
+	t.Run("pop 2 times from stack", func(t *testing.T) {
+		s := stack.Stack[int]{}
+		s.Push(1)
+		s.Push(2)
+		s.Push(3)
+		s.Pop()
+		v, err := s.Pop()
+		assert.Equal(t, 2, v)
+		assert.Equal(t, nil, err)
+	})
+	t.Run("pop after a pop and push", func(t *testing.T) {
+		s := stack.Stack[int]{}
+		s.Push(1)
+		s.Push(2)
+		s.Push(3)
+		s.Pop()
+		s.Push(4)
+		s.Push(5)
+		v, err := s.Pop()
+		assert.Equal(t, 5, v)
+		assert.Equal(t, nil, err)
+	})
+}
+
 func TestStack_Peek(t *testing.T) {
 	t.Run("empty stack", func(t *testing.T) {
 		s := stack.Stack[int]{}
