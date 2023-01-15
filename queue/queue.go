@@ -8,7 +8,7 @@ type Queue[T comparable] struct {
 }
 
 func (q *Queue[T]) Enqueue(item T) {
-	q.items.AddFirst(&linkedlist.Node[T]{Value: item})
+	q.items.AddLast(&linkedlist.Node[T]{Value: item})
 }
 
 func (q *Queue[T]) Dequeue() (T, error) {
@@ -16,7 +16,7 @@ func (q *Queue[T]) Dequeue() (T, error) {
 		var noop T
 		return noop, QueueIsEmpty
 	}
-	node, err := q.items.PopLast()
+	node, err := q.items.PopFirst()
 	if err != nil {
 		var noop T
 		return noop, err
@@ -24,6 +24,18 @@ func (q *Queue[T]) Dequeue() (T, error) {
 	return node.Value, nil
 }
 
+func (q *Queue[T]) Peek() (T, error) {
+	if q.IsEmpty() {
+		var noop T
+		return noop, QueueIsEmpty
+	}
+	return q.items.Head.Value, nil
+}
+
 func (q *Queue[T]) IsEmpty() bool {
 	return q.items.IsEmpty()
+}
+
+func (q *Queue[T]) Contains(item T) bool {
+	return q.items.ContainsValue(item)
 }
